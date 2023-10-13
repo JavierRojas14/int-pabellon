@@ -41,6 +41,7 @@ def preprocesar_base_de_datos_pabellon(df):
 
     tmp = clean_column_names(tmp)
     tmp = tmp.replace(" ", np.nan)
+    tmp = tmp.replace("-", np.nan)
     tmp = tmp.dropna(subset="fecha")
     tmp.columns = (
         tmp.columns.str.replace("_seleccionar_lista", "").str.strip("_").str.replace(":", "")
