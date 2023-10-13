@@ -34,6 +34,7 @@ COLUMNAS_UTILES = [
 ]
 
 REEMPLAZAR_FECHAS = {"07-07-215": "07-07-2015"}
+REEMPLAZAR_HORA_INICIO = {"10.45", "10:45:00"}
 
 
 def preprocesar_base_de_datos_pabellon(df):
@@ -48,6 +49,14 @@ def preprocesar_base_de_datos_pabellon(df):
     )
     tmp["fecha"] = tmp["fecha"].replace(REEMPLAZAR_FECHAS)
     tmp["fecha"] = pd.to_datetime(tmp["fecha"])
+
+    tmp["h_inicio"] = tmp["h_inicio"].replace(REEMPLAZAR_HORA_INICIO)
+
+    columnas_horas_en_pabellon = tmp.columns[tmp.columns.str.startswith("h_")]
+    tmp[columnas_horas_en_pabellon] = tmp[columnas_horas_en_pabellon].apply(
+        lambda x: x.str.replace("1900-01-01 ", "", regex=False)
+    )
+
     return tmp
 
 
