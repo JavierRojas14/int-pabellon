@@ -52,10 +52,10 @@ def preprocesar_base_de_datos_pabellon(df):
 
     tmp["h_inicio"] = tmp["h_inicio"].replace(REEMPLAZAR_HORA_INICIO)
 
-    columnas_horas_en_pabellon = tmp.columns[tmp.columns.str.startswith("h_")]
-    tmp[columnas_horas_en_pabellon] = tmp[columnas_horas_en_pabellon].apply(
-        lambda x: x.str.replace("1900-01-01 ", "", regex=False)
-    )
+    # columnas_horas_en_pabellon = tmp.columns[tmp.columns.str.startswith("h_")]
+    # tmp[columnas_horas_en_pabellon] = tmp[columnas_horas_en_pabellon].apply(
+    #     lambda x: x.str.replace("1900-01-01 ", "", regex=False)
+    # )
 
     return tmp
 
