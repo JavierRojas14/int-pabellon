@@ -40,6 +40,7 @@ def preprocesar_base_de_datos_pabellon(df):
     tmp = df.copy()
 
     tmp = clean_column_names(tmp)
+    tmp = tmp.reset_index(drop=True)
     tmp = tmp.replace(" ", np.nan)
     tmp = tmp.replace("-", np.nan)
     tmp = tmp.dropna(subset="fecha")
@@ -55,7 +56,27 @@ def preprocesar_base_de_datos_pabellon(df):
             tmp[columna_hora].astype(str).str.replace("1900-01-01 ", "", regex=False)
         )
 
+    tmp["h_inicio"] = limpiar_columna_hora_inicio(tmp["h_inicio"])
+
     return tmp
+
+
+def limpiar_columna_hora_inicio(serie_hora_inicio):
+    hora_inicio_reemplazada = serie_hora_inicio.str.replace(
+        r"1900-01-01\s|1900-01-05\s", "", regex=True
+    ).str.replace(r";|:|\.|_", "", regex=True)
+
+    horas_largo_3 = hora_inicio_reemplazada[hora_inicio_reemplazada.str.len() == 3].index
+    hora_inicio_reemplazada[horas_largo_3] = hora_inicio_reemplazada[horas_largo_3].str.pad(
+        4, side="left", fillchar="0"
+    )
+
+    hora_inicio_reemplazada = hora_inicio_reemplazada.str[:4].str.pad(6, side="right", fillchar="0")
+
+    hora_inicio_reemplazada = pd.to_datetime(
+        hora_inicio_reemplazada, format="%H%M%S", errors="coerce"
+    )
+    return hora_inicio_reemplazada
 
 
 def clean_column_names(df):
