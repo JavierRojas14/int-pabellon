@@ -8,5 +8,6 @@ def obtener_diccionario_mai():
 
     codigos_mai.columns = ["CODIGO", "CA", "GLOSA PRESTACION", "FACTURACION TOTAL", "COBRO USUARIO"]
     codigos_mai = codigos_mai.dropna(subset="CODIGO")
+    codigos_mai["CODIGO"] = codigos_mai["CODIGO"].astype(int)
 
     return codigos_mai
