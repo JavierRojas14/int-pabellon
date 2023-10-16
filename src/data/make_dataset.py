@@ -60,6 +60,7 @@ def preprocesar_base_de_datos_pabellon(df):
     tmp["h_termino"] = limpiar_columna_hora_termino(tmp["h_termino"])
     tmp["h_salida"] = limpiar_columna_hora_salida(tmp["h_salida"])
     tmp["duracion"] = limpiar_columna_duracion(tmp["duracion"])
+    tmp["aseo"] = limpiar_columna_aseo(tmp["aseo"])
 
     return tmp
 
@@ -109,6 +110,13 @@ def limpiar_columna_hora_salida(serie_hora_salida):
 
 def limpiar_columna_duracion(serie_hora_duracion):
     return pd.to_datetime(serie_hora_duracion.astype(str).str.replace(":", ""), format="%H%M%S")
+
+
+def limpiar_columna_aseo(serie_tiempo_aseo):
+    return pd.to_datetime(
+        serie_tiempo_aseo.astype(str).replace("0.30", "00:30:00").str.replace(":", ""),
+        format="%H%M%S",
+    )
 
 
 def clean_column_names(df):
