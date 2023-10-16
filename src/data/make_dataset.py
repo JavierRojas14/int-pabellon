@@ -56,11 +56,11 @@ def preprocesar_base_de_datos_pabellon(df):
             tmp[columna_hora].astype(str).str.replace("1900-01-01 ", "", regex=False)
         )
 
-    tmp["h_inicio"] = limpiar_columna_hora_inicio(tmp["h_inicio"])
-    tmp["h_termino"] = limpiar_columna_hora_termino(tmp["h_termino"])
-    tmp["h_salida"] = limpiar_columna_hora_salida(tmp["h_salida"])
-    tmp["duracion"] = limpiar_columna_duracion(tmp["duracion"])
-    tmp["aseo"] = limpiar_columna_aseo(tmp["aseo"])
+    tmp["h_inicio"] = limpiar_columna_hora_inicio(tmp["h_inicio"]).dt.time
+    tmp["h_termino"] = limpiar_columna_hora_termino(tmp["h_termino"]).dt.time
+    tmp["h_salida"] = limpiar_columna_hora_salida(tmp["h_salida"]).dt.time
+    tmp["duracion"] = limpiar_columna_duracion(tmp["duracion"]).dt.time
+    tmp["aseo"] = limpiar_columna_aseo(tmp["aseo"]).dt.time
 
     return tmp
 
