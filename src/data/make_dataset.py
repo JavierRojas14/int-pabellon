@@ -62,7 +62,27 @@ def preprocesar_base_de_datos_pabellon(df):
     tmp["duracion"] = limpiar_columna_duracion(tmp["duracion"]).dt.time
     tmp["aseo"] = limpiar_columna_aseo(tmp["aseo"]).dt.time
 
+    tmp["codigo_i"] = limpiar_codigo_operacion_i(tmp["codigo_i"])
+
     return tmp
+
+
+def limpiar_codigo_operacion_i(serie_operacion):
+    codigos_formateados = (
+        serie_operacion.fillna("000000")
+        .astype(str)
+        .str.replace("/", "-", regex=False)
+        .str.replace(".0", "", regex=False)
+    )
+
+    codigos_con_guion = codigos_formateados.str.contains("-").fillna(False)
+    codigos_formateados[codigos_con_guion] = (
+        codigos_formateados[codigos_con_guion].str.split("-").str[0].str.strip()
+    )
+
+    codigos_formateados = codigos_formateados.astype("Int32")
+
+    return codigos_formateados
 
 
 def limpiar_columna_hora_inicio(serie_hora_inicio):
