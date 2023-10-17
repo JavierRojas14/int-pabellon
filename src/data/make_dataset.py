@@ -9,6 +9,11 @@ import glob
 import pandas as pd
 import numpy as np
 
+import warnings
+
+# Ignora UserWarnings debido a que las bases de datos presentan validacion de datos
+warnings.filterwarnings("ignore", category=UserWarning)
+
 COLUMNAS_UTILES = [
     "FECHA ",
     "SEXO SELECCIONAR LISTA",
