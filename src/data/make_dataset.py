@@ -74,7 +74,7 @@ def preprocesar_base_de_datos_pabellon(df):
 
 def limpiar_codigo_operacion_i(serie_operacion):
     codigos_formateados = (
-        serie_operacion.fillna("000000")
+        serie_operacion.fillna("0000000")
         .astype(str)
         .str.replace("/", "-", regex=False)
         .str.replace(".0", "", regex=False)
@@ -85,7 +85,7 @@ def limpiar_codigo_operacion_i(serie_operacion):
         codigos_formateados[codigos_con_guion].str.split("-").str[0].str.strip()
     )
 
-    codigos_formateados = codigos_formateados.str.pad(7, side="left", fillchar="0")
+    # codigos_formateados = codigos_formateados.str.pad(7, side="left", fillchar="0")
 
     return codigos_formateados
 
