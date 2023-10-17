@@ -85,7 +85,7 @@ def limpiar_codigo_operacion_i(serie_operacion):
         codigos_formateados[codigos_con_guion].str.split("-").str[0].str.strip()
     )
 
-    codigos_formateados = codigos_formateados.astype("Int32")
+    codigos_formateados = codigos_formateados.str.pad(7, side="left", fillchar="0")
 
     return codigos_formateados
 
