@@ -191,7 +191,9 @@ def main(input_filepath, output_filepath):
 
         df_de_un_anio = pd.concat(
             (
-                pd.read_excel(archivo, sheet_name=1, usecols=COLUMNAS_UTILES)
+                pd.read_excel(
+                    archivo, sheet_name=1, usecols=COLUMNAS_UTILES, dtype={"CODIGO I": str}
+                )
                 for archivo in archivos_pabellon
             )
         )
