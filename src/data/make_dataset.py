@@ -75,7 +75,11 @@ def preprocesar_base_de_datos_pabellon(df):
     tmp["duracion"] = limpiar_columna_duracion(tmp["duracion"]).dt.time
     tmp["aseo"] = limpiar_columna_aseo(tmp["aseo"]).dt.time
 
-    tmp["codigo_i"] = limpiar_codigo_operacion_i(tmp["codigo_i"])
+    # Limpia codigos de la operacion realizada
+    tmp["codigo_i"] = limpiar_codigos_operacion(tmp["codigo_i"])
+    tmp["codigo_ii"] = limpiar_codigos_operacion(tmp["codigo_ii"])
+    tmp["ppv_-ges"] = limpiar_codigos_operacion(tmp["ppv_-ges"])
+
     tmp["tipo_de_cirugia"] = limpiar_tipo_de_operacion(tmp["tipo_de_cirugia"])
     tmp["cirugia_programada_o_urgente"] = obtener_operaciones_programadas_y_urgentes(
         tmp["tipo_de_cirugia"]
@@ -92,20 +96,14 @@ def limpiar_tipo_de_operacion(serie_tipo_operacion):
     return serie_tipo_operacion.str.strip().str.upper()
 
 
-def limpiar_codigo_operacion_i(serie_operacion):
+def limpiar_codigos_operacion(serie_operacion):
     codigos_formateados = (
         serie_operacion.fillna("0000000")
         .astype(str)
         .str.replace("/", "-", regex=False)
         .str.replace(".0", "", regex=False)
+        .str.replace(" ", "", regex=False)
     )
-
-    codigos_con_guion = codigos_formateados.str.contains("-").fillna(False)
-    codigos_formateados[codigos_con_guion] = (
-        codigos_formateados[codigos_con_guion].str.split("-").str[0].str.strip()
-    )
-
-    # codigos_formateados = codigos_formateados.str.pad(7, side="left", fillchar="0")
 
     return codigos_formateados
 
