@@ -63,6 +63,7 @@ def preprocesar_base_de_datos_pabellon(df):
     tmp["fecha"] = tmp["fecha"].replace(REEMPLAZAR_FECHAS)
     tmp["fecha"] = pd.to_datetime(tmp["fecha"])
 
+    # Limpia tiempos de la operacion
     columnas_horas_en_pabellon = tmp.columns[tmp.columns.str.startswith("h_")]
     for columna_hora in columnas_horas_en_pabellon:
         tmp[columna_hora] = (
@@ -80,6 +81,7 @@ def preprocesar_base_de_datos_pabellon(df):
     tmp["codigo_ii"] = limpiar_codigos_operacion(tmp["codigo_ii"])
     tmp["ppv_-ges"] = limpiar_codigos_operacion(tmp["ppv_-ges"])
 
+    # Limpia tipo de operacion (Programada, Urgente)
     tmp["tipo_de_cirugia"] = limpiar_tipo_de_operacion(tmp["tipo_de_cirugia"])
     tmp["cirugia_programada_o_urgente"] = obtener_operaciones_programadas_y_urgentes(
         tmp["tipo_de_cirugia"]
