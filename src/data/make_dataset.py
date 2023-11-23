@@ -39,6 +39,14 @@ COLUMNAS_UTILES = [
 ]
 
 REEMPLAZAR_FECHAS = {"07-07-215": "07-07-2015"}
+REEMPLAZAR_TIPO_DE_OPERACION = {
+    "E": "Programada",
+    "P": "Programada",
+    "EU": "Urgencia",
+    "U": "Urgencia",
+    "EMERGENCIA": "Urgencia",
+    "URGENCIA": "Urgencia",
+}
 
 
 def preprocesar_base_de_datos_pabellon(df):
@@ -68,8 +76,20 @@ def preprocesar_base_de_datos_pabellon(df):
     tmp["aseo"] = limpiar_columna_aseo(tmp["aseo"]).dt.time
 
     tmp["codigo_i"] = limpiar_codigo_operacion_i(tmp["codigo_i"])
+    tmp["tipo_de_cirugia"] = limpiar_tipo_de_operacion(tmp["tipo_de_cirugia"])
+    tmp["cirugia_programada_o_urgente"] = obtener_operaciones_programadas_y_urgentes(
+        tmp["tipo_de_cirugia"]
+    )
 
     return tmp
+
+
+def obtener_operaciones_programadas_y_urgentes(serie_tipo_operacion):
+    return serie_tipo_operacion.replace(REEMPLAZAR_TIPO_DE_OPERACION)
+
+
+def limpiar_tipo_de_operacion(serie_tipo_operacion):
+    return serie_tipo_operacion.str.strip().str.upper()
 
 
 def limpiar_codigo_operacion_i(serie_operacion):
