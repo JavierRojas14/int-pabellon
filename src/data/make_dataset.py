@@ -81,6 +81,9 @@ def preprocesar_base_de_datos_pabellon(df):
     tmp["codigo_ii"] = limpiar_codigos_operacion(tmp["codigo_ii"])
     tmp["ppv_-ges"] = limpiar_codigos_operacion(tmp["ppv_-ges"])
 
+    # Agrega columna de la union de los dos codigos de operaciones
+    tmp["combinacion_operaciones"] = tmp["codigo_i"] + "_" + tmp["codigo_ii"]
+
     # Limpia tipo de operacion (Programada, Urgente)
     tmp["tipo_de_cirugia"] = limpiar_tipo_de_operacion(tmp["tipo_de_cirugia"])
     tmp["cirugia_programada_o_urgente"] = obtener_operaciones_programadas_y_urgentes(
