@@ -11,12 +11,16 @@ import numpy as np
 
 import warnings
 
+import json
+import hashlib
+
 # Ignora UserWarnings debido a que las bases de datos presentan validacion de datos
 warnings.filterwarnings("ignore", category=UserWarning)
 
 COLUMNAS_UTILES = [
     "FECHA ",
     "SEXO SELECCIONAR LISTA",
+    "FICHA",
     "EDAD ",
     "PREV: SELECCIONAR LISTA",
     "ESPECIALIDAD  SELECCIONAR LISTA",
@@ -89,6 +93,10 @@ def preprocesar_base_de_datos_pabellon(df):
     tmp["cirugia_programada_o_urgente"] = obtener_operaciones_programadas_y_urgentes(
         tmp["tipo_de_cirugia"]
     )
+
+    # Limpia los RUTs
+    tmp["ficha"] = anonimizar_ruts(tmp["ficha"])
+    tmp = tmp.rename(columns={"ficha": "ID_PACIENTE"})
 
     return tmp
 
@@ -165,6 +173,35 @@ def limpiar_columna_aseo(serie_tiempo_aseo):
         serie_tiempo_aseo.astype(str).replace("0.30", "00:30:00").str.replace(":", ""),
         format="%H%M%S",
     )
+
+
+def anonimizar_ruts(columna_ruts):
+    try:
+        with open("data/external/salts.json", encoding="utf-8") as file:
+            sales = json.load(file)
+            sal_rut = sales["Rut Paciente"]
+
+    except FileNotFoundError:
+        print(
+            "Debes tener el archivo de las sales actualizado para anonimizar los RUTS. "
+            "La base de datos NO pudo ser procesada."
+        )
+        exit()
+
+    ruts_anonimizados = (
+        bytes.fromhex(sal_rut) + columna_ruts.astype(str).str.encode(encoding="utf-8")
+    ).apply(lambda x: hashlib.sha256(x).hexdigest())
+
+    return ruts_anonimizados
+
+
+def limpiar_ruts(serie_ruts):
+    # Deja los RUTs sin DV, sin puntos, sin espacios ni guiones
+    ruts = serie_ruts.str.replace("\.|-|\s", "", regex=True).str[:-1]
+    # Anonimiza los RUTs
+    ruts = anonimizar_ruts()
+
+    return ruts
 
 
 def clean_column_names(df):
