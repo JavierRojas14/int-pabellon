@@ -196,16 +196,7 @@ def clean_column_names(df):
     return tmp
 
 
-@click.command()
-@click.argument("input_filepath", type=click.Path(exists=True))
-@click.argument("output_filepath", type=click.Path())
-def main(input_filepath, output_filepath):
-    """Runs data processing scripts to turn raw data from (../raw) into
-    cleaned data ready to be analyzed (saved in ../processed).
-    """
-    logger = logging.getLogger(__name__)
-    logger.info("making final data set from raw data")
-
+def leer_base_pabellon(input_filepath):
     anios_a_leer = list(filter(lambda x: x.isnumeric(), os.listdir(input_filepath)))
     todos_los_anios_pabellon = []
     for anio in anios_a_leer:
@@ -223,6 +214,21 @@ def main(input_filepath, output_filepath):
         todos_los_anios_pabellon.append(df_de_un_anio)
 
     df_completa = pd.concat(todos_los_anios_pabellon)
+
+    return df_completa
+
+
+@click.command()
+@click.argument("input_filepath", type=click.Path(exists=True))
+@click.argument("output_filepath", type=click.Path())
+def main(input_filepath, output_filepath):
+    """Runs data processing scripts to turn raw data from (../raw) into
+    cleaned data ready to be analyzed (saved in ../processed).
+    """
+    logger = logging.getLogger(__name__)
+    logger.info("making final data set from raw data")
+
+    df_completa = leer_base_pabellon(input_filepath)
     df_completa = preprocesar_base_de_datos_pabellon(df_completa)
 
     df_completa.to_csv(
