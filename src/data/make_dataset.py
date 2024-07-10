@@ -95,7 +95,7 @@ def preprocesar_base_de_datos_pabellon(df):
     )
 
     # Limpia los RUTs
-    tmp["ficha"] = anonimizar_ruts(tmp["ficha"])
+    tmp["ficha"] = limpiar_ruts(tmp["ficha"])
     tmp = tmp.rename(columns={"ficha": "ID_PACIENTE"})
 
     return tmp
