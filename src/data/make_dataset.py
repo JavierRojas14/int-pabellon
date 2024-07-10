@@ -53,6 +53,13 @@ REEMPLAZAR_TIPO_DE_OPERACION = {
     "URGENCIA": "Urgencia",
 }
 
+REEMPLAZAR_SUSPENDIDA = {
+    "L": "NO",
+    "UCI": "NO",
+    ",": "NO",
+    "S": "NO",
+}
+
 
 def preprocesar_base_de_datos_pabellon(df):
     tmp = df.copy()
@@ -98,6 +105,9 @@ def preprocesar_base_de_datos_pabellon(df):
     # Limpia los RUTs
     tmp["ficha"] = limpiar_ruts(tmp["ficha"])
     tmp = tmp.rename(columns={"ficha": "ID_PACIENTE"})
+
+    # Limpia la columna de Suspendido
+    tmp["suspendida"] = limpiar_suspendida(tmp["suspendida"])
 
     return tmp
 
@@ -220,6 +230,16 @@ def limpiar_ruts(serie_ruts):
     ruts = anonimizar_ruts(ruts)
 
     return ruts
+
+
+def limpiar_suspendida(serie_suspendidos):
+    # Convierte todo a formato unificado
+    suspendidos = serie_suspendidos.str.strip().str.upper()
+
+    # Reemplaza glosas poco explicitas
+    suspendidos = suspendidos.replace(REEMPLAZAR_SUSPENDIDA)
+
+    return suspendidos
 
 
 def clean_column_names(df):
