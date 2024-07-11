@@ -239,6 +239,10 @@ def limpiar_suspendida(serie_suspendidos):
     # Reemplaza glosas poco explicitas
     suspendidos = suspendidos.replace(REEMPLAZAR_SUSPENDIDA)
 
+    # Llena valores faltantes de suspendidos por NO (solamente porque se observo que las int. q.
+    # que faltaban, si fueron realizadas)
+    suspendidos = suspendidos.fillna("NO")
+
     return suspendidos
 
 
