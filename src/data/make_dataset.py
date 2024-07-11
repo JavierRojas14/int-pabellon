@@ -241,7 +241,7 @@ def limpiar_suspendida(serie_suspendidos):
 
     # Llena valores faltantes de suspendidos por NO (solamente porque se observo que las int. q.
     # que faltaban, si fueron realizadas)
-    suspendidos = suspendidos.fillna("NO")
+    # suspendidos = suspendidos.fillna("NO")
 
     return suspendidos
 
