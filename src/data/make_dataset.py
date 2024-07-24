@@ -227,7 +227,7 @@ def limpiar_ruts(serie_ruts):
     # Deja los RUTs sin DV, sin puntos, sin espacios ni guiones
     ruts = serie_ruts.str.replace("\.|-|\s", "", regex=True).str[:-1]
     # Anonimiza los RUTs
-    ruts = anonimizar_ruts(ruts)
+    # ruts = anonimizar_ruts(ruts)
 
     return ruts
 
