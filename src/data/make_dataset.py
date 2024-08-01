@@ -97,10 +97,18 @@ def preprocesar_base_de_datos_pabellon(df):
     tmp["combinacion_operaciones"] = tmp["codigo_i"] + "_" + tmp["codigo_ii"]
 
     # Limpia tipo de operacion (Programada, Urgente)
-    tmp["tipo_de_cirugia"] = limpiar_tipo_de_operacion(tmp["tipo_de_cirugia"])
+    tmp["tipo_de_cirugia"] = quitar_espacios_y_poner_mayuscula_columna_texto(tmp["tipo_de_cirugia"])
     tmp["cirugia_programada_o_urgente"] = obtener_operaciones_programadas_y_urgentes(
         tmp["tipo_de_cirugia"]
     )
+
+    # Limpia el nombre de la operacion
+    tmp["nombre_de_la_operacion"] = quitar_espacios_y_poner_mayuscula_columna_texto(
+        tmp["nombre_de_la_operacion"]
+    )
+
+    # Limpia la especialidad
+    tmp["especialidad"] = quitar_espacios_y_poner_mayuscula_columna_texto(tmp["especialidad"])
 
     # Limpia los RUTs
     tmp["ficha"] = limpiar_ruts(tmp["ficha"])
@@ -116,7 +124,7 @@ def obtener_operaciones_programadas_y_urgentes(serie_tipo_operacion):
     return serie_tipo_operacion.replace(REEMPLAZAR_TIPO_DE_OPERACION)
 
 
-def limpiar_tipo_de_operacion(serie_tipo_operacion):
+def quitar_espacios_y_poner_mayuscula_columna_texto(serie_tipo_operacion):
     return serie_tipo_operacion.str.strip().str.upper()
 
 
