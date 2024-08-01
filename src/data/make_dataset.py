@@ -107,6 +107,14 @@ def preprocesar_base_de_datos_pabellon(df):
         tmp["nombre_de_la_operacion"]
     )
 
+    # Limpia los diagnosticos
+    tmp["primer_diagnostico"] = quitar_espacios_y_poner_mayuscula_columna_texto(
+        tmp["primer_diagnostico"]
+    )
+    tmp["segundo_diagnostico"] = quitar_espacios_y_poner_mayuscula_columna_texto(
+        tmp["segundo_diagnostico"]
+    )
+
     # Limpia la especialidad
     tmp["especialidad"] = quitar_espacios_y_poner_mayuscula_columna_texto(tmp["especialidad"])
 
