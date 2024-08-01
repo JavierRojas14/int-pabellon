@@ -72,8 +72,11 @@ def preprocesar_base_de_datos_pabellon(df):
     tmp.columns = (
         tmp.columns.str.replace("_seleccionar_lista", "").str.strip("_").str.replace(":", "")
     )
+    # Limpia las fechas, ordena por fecha y agrega el anio de la intervencion
     tmp["fecha"] = tmp["fecha"].replace(REEMPLAZAR_FECHAS)
     tmp["fecha"] = pd.to_datetime(tmp["fecha"])
+    tmp = tmp.sort_values("fecha")
+    tmp["ano_de_intervencion"] = tmp["fecha"].dt.year
 
     # Limpia tiempos de la operacion
     columnas_horas_en_pabellon = tmp.columns[tmp.columns.str.startswith("h_")]
