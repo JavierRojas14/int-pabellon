@@ -1,18 +1,16 @@
 # -*- coding: utf-8 -*-
-import click
-import logging
-from pathlib import Path
-from dotenv import find_dotenv, load_dotenv
-
-import os
 import glob
-import pandas as pd
-import numpy as np
-
-import warnings
-
-import json
 import hashlib
+import json
+import logging
+import os
+import warnings
+from pathlib import Path
+
+import click
+import numpy as np
+import pandas as pd
+from dotenv import find_dotenv, load_dotenv
 
 # Ignora UserWarnings debido a que las bases de datos presentan validacion de datos
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -203,43 +201,6 @@ def limpiar_columna_aseo(serie_tiempo_aseo):
         serie_tiempo_aseo.astype(str).replace("0.30", "00:30:00").str.replace(":", ""),
         format="%H%M%S",
     )
-
-
-def anonimizar_ruts(columna_ruts: pd.Series) -> pd.Series:
-    """
-    Anonimiza una serie de RUTs utilizando un valor de sal almacenado en un archivo JSON. El RUT
-    debe estar sin puntos, guiones ni DV.
-
-    Parámetros:
-    columna_ruts (pd.Series): Serie de pandas que contiene los RUTs a anonimizar.
-
-    Retorna:
-    pd.Series: Serie de pandas con los RUTs anonimizados.
-    """
-    try:
-        # Cargar el archivo de sales
-        with open("data/external/salts.json", encoding="utf-8") as file:
-            sales = json.load(file)
-            sal_rut = sales["Rut Paciente"]
-
-    except FileNotFoundError:
-        print(
-            "Debes tener el archivo de las sales actualizado para anonimizar los RUTs. La base "
-            "de datos NO pudo ser procesada."
-        )
-        exit()
-
-    # Convertir la sal a bytes y combinar con los RUTs
-    sal_bytes = bytes.fromhex(sal_rut)
-    ruts_bytes = columna_ruts.astype(str).str.strip().str.encode(encoding="utf-8")
-
-    # Concatena sal y rut
-    ruts_con_sal = sal_bytes + ruts_bytes
-
-    # Aplicar SHA-256 para anonimizar
-    ruts_anonimizados = ruts_con_sal.apply(lambda x: hashlib.sha256(x).hexdigest())
-
-    return ruts_anonimizados
 
 
 def limpiar_ruts(serie_ruts):
